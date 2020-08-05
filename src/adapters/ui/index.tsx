@@ -2,25 +2,38 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router } from "react-router-dom";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 
 import { App } from "./App";
 
-import { CustomApolloClient } from "../../types";
+import * as types from "../../types";
+import { AppContext } from "./context";
+
+const theme = createMuiTheme({
+  palette: {
+    type: "dark"
+  }
+});
 
 export const render = (params: {
-  apolloClient: CustomApolloClient,
+  service: types.IService,
+  apolloClient: types.CustomApolloClient,
+  container: HTMLElement,
 }) => {
-  const container = document.querySelector("#app");
-  if (!container) {
-    return;
-  }
+  const context = {
+    service: params.service,
+  };
 
   ReactDOM.render(
-    <ApolloProvider client={params.apolloClient}>
-      <Router>
-        <App />
-      </Router>
-    </ApolloProvider>,
-    container
+    <AppContext.Provider value={context}>
+      <ApolloProvider client={params.apolloClient}>
+        <ThemeProvider theme={theme}>
+          <Router>
+            <App />
+          </Router>
+        </ThemeProvider>
+      </ApolloProvider>
+    </AppContext.Provider>,
+    params.container
   );
 };

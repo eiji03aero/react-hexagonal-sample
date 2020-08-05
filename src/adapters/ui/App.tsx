@@ -1,25 +1,36 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
+import { Paper, makeStyles, Theme } from "@material-ui/core";
 
 import { Top, Todos } from "./routes";
 import { Layout } from "./Layout";
 
-export const App: React.FC = ({
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: "100%",
+    height: "100%",
+    background: theme.palette.background.default,
+  }
+}));
 
-}) => {
+export const App: React.FC = () => {
+  const classes = useStyles();
+
   return (
-    <Layout>
-      <Switch>
-        <Route exact path="/">
-          <Top />
-        </Route>
-        <Route exact path="/todos">
-          <Todos />
-        </Route>
-        <Route>
-          <h1>Not found</h1>
-        </Route>
-      </Switch>
-    </Layout>
+    <Paper className={classes.root}>
+      <Layout>
+        <Switch>
+          <Route exact path="/">
+            <Top />
+          </Route>
+          <Route exact path="/todos">
+            <Todos />
+          </Route>
+          <Route>
+            <h1>Not found</h1>
+          </Route>
+        </Switch>
+      </Layout>
+    </Paper>
   );
 };

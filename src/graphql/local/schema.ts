@@ -13,6 +13,8 @@ type Todo {
   id: ID!
   title: String!
   done: Boolean!
+  createdAt: String!
+  updatedAt: String!
 }
 `;
 

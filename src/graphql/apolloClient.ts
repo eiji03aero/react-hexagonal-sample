@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, NormalizedCacheObject } from "@apollo/client";
-import { initialState, GetLocalStateDocument } from "./local";
+import { initialState, GetLocalStateDocument, typeDefs } from "./local";
 
 import { CustomApolloClient } from "../types";
 
@@ -9,6 +9,7 @@ export const createApolloClient = (_: {
 
   const apolloClient: CustomApolloClient = new ApolloClient<NormalizedCacheObject>({
     cache,
+    typeDefs,
   });
 
   const writeInitialState = () => {
