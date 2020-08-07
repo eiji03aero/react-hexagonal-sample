@@ -4,8 +4,12 @@ services:
   workspace:
     image: local/node:12.7.0
     volumes:
-      - .:/app
+      - v-sync-rhs:/app
     ports:
       - "8080:8080"
     tty: true
     command: /bin/bash
+
+volumes:
+  v-sync-rhs:
+    external: true

@@ -1,7 +1,8 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import {
-  Typography,
+  Paper,
+  TextField,
   makeStyles,
 } from "@material-ui/core";
 
@@ -18,8 +19,12 @@ const useStyles = makeStyles({
     flexDirection: "column",
     padding: 16,
   },
-  title: {
-    margin: 16,
+  form: {
+    padding: 16,
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
   },
   list: {
     flex: 1,
@@ -32,9 +37,28 @@ const useStyles = makeStyles({
 });
 
 export const Todos: React.FC = () => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const ctx = React.useContext(AppContext);
   const classes = useStyles();
-  const { data } = useQuery(local.GetLocalStateDocument);
+  const { data } = useQuery(local.GetTodosDocument, {
+    variables: {
+      sort: "desc"
+    }
+  });
+
+  const handleCreate = React.useCallback((e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    if (!inputRef.current) {
+      return;
+    }
+
+    const title = inputRef.current.value;
+    inputRef.current.value = "";
+    ctx.service.createTodo({
+      title,
+    });
+  }, [ctx]);
 
   const handleChangeDone = React.useCallback((t: types.STodo) => {
     ctx.service.markTodoDone({
@@ -45,12 +69,20 @@ export const Todos: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h1" className={classes.title}>
-        Todos page aqui
-      </Typography>
+      <Paper elevation={3} className={classes.form}>
+        <form noValidate autoComplete="off" onSubmit={handleCreate}>
+          <TextField
+            inputRef={inputRef}
+            label="Create new"
+            placeholder="Hit enter to submit"
+            size="medium"
+            fullWidth
+          />
+        </form>
+      </Paper>
 
       <div className={classes.list}>
-        {data.localState.todos.map((todo: types.STodo) => (
+        {data.todos.map((todo: types.STodo) => (
           <TodoCard
             key={todo.id}
             todo={todo}

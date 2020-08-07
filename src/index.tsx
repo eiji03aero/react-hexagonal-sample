@@ -18,13 +18,35 @@ document.addEventListener("DOMContentLoaded", function (_) {
     proxy
   });
 
-  service.createTodo({
-    title: "domo",
-  });
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      service.createTodo({
+        title: "domo" + String(i),
+      });
+    }, i * 200);
+  }
 
-  service.createTodo({
-    title: "kore",
-  });
+  (window as any).todosasc = async () => {
+    const r = await proxy.getTodos({
+      sort: "asc",
+    });
+    console.log(r);
+    return r;
+  }
+
+  (window as any).todos = async () => {
+    const r = await proxy.getTodos({})
+    console.log(r);
+    return r;
+  }
+
+  (window as any).todosdesc = async () => {
+    const r = await proxy.getTodos({
+      sort: "desc"
+    });
+    console.log(r);
+    return r;
+  }
 
   render({
     service,

@@ -10,14 +10,21 @@ export class Proxy implements types.IProxy {
     this._apolloClient = params.apolloClient;
   }
 
-  async getTodos (): Promise<types.STodo[]> {
-    const { todos } = this.getLocalState();
-    return todos;
+  async getTodos (params: types.TodosInput): Promise<types.STodo[]> {
+    const result = this._apolloClient.readQuery<{ todos: types.STodo[] }>({
+      query: local.GetTodosDocument,
+      variables: params,
+    });
+    if (!result) {
+      return [] as types.STodo[];
+    }
+
+    return result.todos;
   }
 
   async getTodoById (id: string): Promise<types.STodo> {
-    const { todos } = this.getLocalState();
-    const todo = todos.find((t: types.STodo) => t.id === id);
+    const stodos = await this.getTodos({});
+    const todo = stodos.find((t: types.STodo) => t.id === id);
     if (!todo) {
       throw new Error("Not found");
     }
@@ -26,45 +33,29 @@ export class Proxy implements types.IProxy {
   }
 
   async addTodo (stodo: types.STodo): Promise<null> {
-    const { todos } = this.getLocalState();
-    this.writeLocalState({
-      todos: todos.slice().concat(stodo)
+    const stodos = await this.getTodos({});
+    this._apolloClient.writeQuery({
+      query: local.GetTodosDocument,
+      data: {
+        todos: [stodo, ...stodos]
+      }
     });
 
     return null;
   }
 
   async updateTodo (stodo: types.STodo): Promise<null> {
-    const { todos } = this.getLocalState();
-    const updatedTodos = todos.map((t: types.STodo) => {
+    const stodos = await this.getTodos({});
+    const updatedTodos = stodos.map((t: types.STodo) => {
       if (stodo.id === t.id) {
         return stodo;
       }
       return t;
     });
-    this.writeLocalState({
-      todos: updatedTodos,
-    });
-
-    return null;
-  }
-
-  getLocalState (): types.ILocalState {
-    const result = this._apolloClient.readQuery<{ localState: types.ILocalState }>({
-      query: local.GetLocalStateDocument
-    });
-    if (!result) {
-      throw new Error("query failed");
-    }
-
-    return result.localState;
-  }
-
-  writeLocalState (data: Partial<types.ILocalState>): null {
     this._apolloClient.writeQuery({
-      query: local.GetLocalStateDocument,
+      query: local.GetTodosDocument,
       data: {
-        localState: data
+        todos: updatedTodos
       }
     });
 

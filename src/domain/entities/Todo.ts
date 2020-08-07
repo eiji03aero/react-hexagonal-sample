@@ -17,6 +17,7 @@ export class Todo extends BaseEntity implements types.ITodo {
   serialize () {
     return {
       ...super.serialize(),
+      __typename: "Todo",
       title: this.title,
       done: this.done,
     };

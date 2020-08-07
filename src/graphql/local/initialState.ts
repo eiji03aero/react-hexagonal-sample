@@ -1,13 +1,9 @@
-import { ITodo } from "../../types";
+import * as types from "../../types";
 
 type InitialState = {
-  localState: {
-    todos: ITodo[],
-  }
+  todos: types.STodo[],
 };
 
 export const initialState: InitialState = {
-  localState: {
-    todos: [] as ITodo[],
-  }
+  todos: [] as types.STodo[],
 };

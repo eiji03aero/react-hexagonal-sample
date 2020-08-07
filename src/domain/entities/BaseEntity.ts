@@ -19,6 +19,7 @@ export class BaseEntity implements IBaseEntity {
   serialize () {
     return {
       id: this.id,
+      __typename: "BaseEntity",
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

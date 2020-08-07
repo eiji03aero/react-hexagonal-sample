@@ -12,9 +12,10 @@ export class Service implements types.IService {
     this._todosService = new dmn.TodosService({
       proxy: this._proxy,
     });
+  }
 
-    // To suppress warning not used
-    this._proxy;
+  async getTodos (params: types.TodosInput): Promise<types.STodo[]> {
+    return this._proxy.getTodos(params);
   }
 
   async createTodo (params: {

@@ -2,10 +2,7 @@
 - Sample project to describe React + Hexagonal architecture
 
 # Todo
-- create Todos sample
-  - update done attribute
-- create todo
-- edit todo
+- edit todo title
 - notifications
   - add models
     - success

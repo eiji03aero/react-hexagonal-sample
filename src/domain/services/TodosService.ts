@@ -19,7 +19,6 @@ export class TodosService implements types.ITodosService {
     });
     const stodo = todo.serialize();
     await this._proxy.addTodo(stodo);
-    console.log(stodo);
     return stodo;
   }
 

@@ -1,0 +1,8 @@
+version: "2"
+options:
+  verbose: true
+syncs:
+  v-sync-rhs:
+    src: "."
+    sync_excludes: [".git"]
+    notify_terminal: true
