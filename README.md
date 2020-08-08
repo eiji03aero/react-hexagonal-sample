@@ -2,13 +2,6 @@
 - Sample project to describe React + Hexagonal architecture
 
 # Todo
-- edit todo title
-- notifications
-  - add models
-    - success
-    - error
-  - service exposes event emitter
-  - integrate with ui
 - tags
 - error handling
   - fp-ts is coming in here to rescue shitty code!

@@ -28,3 +28,28 @@ export interface ITodosService {
     done: boolean;
   }): Promise<null>;
 }
+
+export type NotificationType =
+  | "info"
+  | "success"
+  | "error";
+
+export interface SNotification extends SBaseEntity {
+  type: NotificationType;
+  message: string;
+}
+
+export interface INotification extends IBaseEntity, SNotification {
+  serialize(): SNotification;
+}
+
+export type NotificationHandler = (snotification: SNotification) => void;
+
+export interface INotificationsService {
+  onNotification(h: NotificationHandler): void;
+  offNotification(h: NotificationHandler): void;
+  dispatch(params: {
+    type: NotificationType,
+    message: string,
+  }): Promise<null>;
+}

@@ -1,0 +1,25 @@
+import * as types from "../../types";
+import { BaseEntity } from "./BaseEntity";
+
+export class Notification extends BaseEntity implements types.INotification {
+  type: types.NotificationType;
+  message: string;
+
+  constructor (params: Partial<types.SBaseEntity> & {
+    type: types.NotificationType;
+    message: string;
+  }) {
+    super(params);
+    this.type = params.type || "info";
+    this.message = params.message || "";
+  }
+
+  serialize () {
+    return {
+      ...super.serialize(),
+      __typename: "Notification",
+      type: this.type,
+      message: this.message,
+    };
+  }
+}

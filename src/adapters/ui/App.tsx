@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { Paper, makeStyles, Theme } from "@material-ui/core";
 
 import { Top, Todos } from "./routes";
+import { NotificationsContainer } from "./containers";
 import { Layout } from "./Layout";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -30,6 +31,8 @@ export const App: React.FC = () => {
             <h1>Not found</h1>
           </Route>
         </Switch>
+
+        <NotificationsContainer />
       </Layout>
     </Paper>
   );

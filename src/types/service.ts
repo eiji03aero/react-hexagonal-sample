@@ -11,6 +11,8 @@ export interface IService {
     id: string,
     done: boolean,
   }): Promise<null>;
+  onNotification(handler: dmn.NotificationHandler): void;
+  offNotification(handler: dmn.NotificationHandler): void;
 }
 
 // -------------------- proxy --------------------
