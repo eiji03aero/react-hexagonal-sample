@@ -12,3 +12,5 @@ export interface ILocalState {
 export type TodosInput = {
   sort?: string;
 }
+
+export type TagsInput = {};

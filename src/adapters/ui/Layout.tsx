@@ -14,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from "@material-ui/icons/Menu";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import clsx from "clsx";
 import { useHistory } from "react-router-dom";
 
@@ -87,6 +88,13 @@ export const Layout: React.FC = ({
                 <MailIcon />
               </ListItemIcon>
               <ListItemText primary="Todos" />
+            </ListItem>
+
+            <ListItem button onClick={navigateTo("/tags")}>
+              <ListItemIcon>
+                <LocalOfferIcon />
+              </ListItemIcon>
+              <ListItemText primary="Tags" />
             </ListItem>
           </List>
         </div>

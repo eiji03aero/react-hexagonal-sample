@@ -61,4 +61,28 @@ export class Proxy implements types.IProxy {
 
     return null;
   }
+
+  async getTags (params: types.TagsInput): Promise<types.STag[]> {
+    const result = this._apolloClient.readQuery<{ tags: types.STag[] }>({
+      query: local.GetTagsDocument,
+      variables: params,
+    });
+    if (!result) {
+      return [] as types.STag[];
+    }
+
+    return result.tags;
+  }
+
+  async addTag (stag: types.STag): Promise<null> {
+    const stags = await this.getTags({});
+    this._apolloClient.writeQuery({
+      query: local.GetTagsDocument,
+      data: {
+        tags: [stag, ...stags],
+      }
+    });
+
+    return null;
+  }
 }

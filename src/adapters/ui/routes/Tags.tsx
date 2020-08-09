@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core";
 
 import * as types from "../../../types";
 import { AppContext } from "../context";
-import { FormCard, TodoCard } from "../components";
+import { FormCard, TagCard } from "../components";
 import { local } from "../../../graphql";
 
 const useStyles = makeStyles({
@@ -18,38 +18,32 @@ const useStyles = makeStyles({
   form: {
     marginBottom: 16,
   },
-  list: {
+  content: {
     flex: 1,
     minHeight: 0,
     overflow: "auto",
+  },
+  list: {
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "flex-start",
     "& > *": {
       marginBottom: 8,
+      marginRight: 8,
     },
   },
 });
 
-export const Todos: React.FC = () => {
+export const Tags: React.FC = () => {
   const ctx = React.useContext(AppContext);
   const classes = useStyles();
-  const todosResult = useQuery(local.GetTodosDocument, {
-    variables: {
-      sort: "desc"
-    }
-  });
-  const tagsResult = useQuery(local.GetTagsDocument, {
+  const { data } = useQuery(local.GetTagsDocument, {
     variables: {}
   });
 
   const handleCreate = React.useCallback((value: string) => {
-    ctx.service.createTodo({
-      title: value,
-    });
-  }, [ctx]);
-
-  const handleChangeDone = React.useCallback((t: types.STodo) => {
-    ctx.service.markTodoDone({
-      id: t.id,
-      done: !t.done,
+    ctx.service.createTag({
+      name: value,
     });
   }, [ctx]);
 
@@ -64,15 +58,15 @@ export const Todos: React.FC = () => {
         />
       </div>
 
-      <div className={classes.list}>
-        {todosResult.data.todos.map((todo: types.STodo) => (
-          <TodoCard
-            key={todo.id}
-            todo={todo}
-            tags={tagsResult.data.tags}
-            onChangeDone={(_: any) => handleChangeDone(todo)}
-          />
-        ))}
+      <div className={classes.content}>
+        <div className={classes.list}>
+          {data.tags.map((tag: types.STag) => (
+            <TagCard
+              key={tag.id}
+              tag={tag}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

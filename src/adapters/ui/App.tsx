@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { Paper, makeStyles, Theme } from "@material-ui/core";
 
-import { Top, Todos } from "./routes";
+import { Top, Todos, Tags } from "./routes";
 import { NotificationsContainer } from "./containers";
 import { Layout } from "./Layout";
 
@@ -26,6 +26,9 @@ export const App: React.FC = () => {
           </Route>
           <Route exact path="/todos">
             <Todos />
+          </Route>
+          <Route exact path="/tags">
+            <Tags />
           </Route>
           <Route>
             <h1>Not found</h1>

@@ -2,11 +2,13 @@
 - Sample project to describe React + Hexagonal architecture
 
 # Todo
-- tags
 - error handling
   - fp-ts is coming in here to rescue shitty code!
-- writequery, readquery wont be atomic once its put inside async
-  - not a problem, but better be solved
+  - utilize notification to give feedback for user
+- todos filter
+  - search by keyword
+  - search by tag
+  - sort
 
 # Models
 
@@ -16,6 +18,7 @@
     - id: string
     - title: string
     - done: boolean
+    - tagIds: string[]
     - createdAt: Datetime
     - updatedAt: Datetime
 
@@ -23,6 +26,14 @@
   - properties
     - id: string
     - message: string
+    - createdAt: Datetime
+    - updatedAt: Datetime
+
+- Tag
+  - properties
+    - id: string
+    - name: string
+    - color: string
     - createdAt: Datetime
     - updatedAt: Datetime
 ```

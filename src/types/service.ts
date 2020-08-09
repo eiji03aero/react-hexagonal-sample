@@ -11,6 +11,11 @@ export interface IService {
     id: string,
     done: boolean,
   }): Promise<null>;
+  getTags(params: gql.TagsInput): Promise<dmn.STag[]>;
+  createTag(params: {
+    name: string,
+    color?: string,
+  }): Promise<dmn.STag>;
   onNotification(handler: dmn.NotificationHandler): void;
   offNotification(handler: dmn.NotificationHandler): void;
 }
@@ -21,4 +26,6 @@ export interface IProxy {
   getTodoById(id: string): Promise<dmn.STodo>;
   addTodo(todo: dmn.STodo): Promise<null>;
   updateTodo(todo: dmn.STodo): Promise<null>;
+  getTags(params: gql.TagsInput): Promise<dmn.STag[]>;
+  addTag(tag: dmn.STag): Promise<null>;
 }

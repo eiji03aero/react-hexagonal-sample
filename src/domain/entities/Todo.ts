@@ -4,14 +4,17 @@ import { BaseEntity } from "./BaseEntity";
 export class Todo extends BaseEntity implements types.ITodo {
   title: string;
   done: boolean;
+  tagIds: string[];
 
   constructor (params: Partial<types.SBaseEntity> & {
-    title: string;
-    done: boolean;
+    title: string,
+    done: boolean,
+    tagIds?: string[],
   }) {
     super(params);
     this.title = params.title;
     this.done = params.done;
+    this.tagIds = params.tagIds || [] as string[];
   }
 
   serialize () {
@@ -20,6 +23,7 @@ export class Todo extends BaseEntity implements types.ITodo {
       __typename: "Todo",
       title: this.title,
       done: this.done,
+      tagIds: this.tagIds,
     };
   }
 

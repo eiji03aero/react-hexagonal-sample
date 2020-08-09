@@ -1,20 +1,19 @@
 import React from "react";
 import {
   Card,
-  CardContent,
   Checkbox,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 
-import { STodo } from "../../../types";
+import * as types from "../../../types";
+import { Tip } from "./Tip";
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-  },
-  content: {
     display: "flex",
+    padding: 16,
   },
   side: {},
   main: {
@@ -23,7 +22,14 @@ const useStyles = makeStyles({
     padding: 8,
   },
   title: {
-    fontSize: 16,
+    marginBottom: 8,
+  },
+  tags: {
+    display: "flex",
+    flexWrap: "wrap",
+    "& > *": {
+      marginRight: 4,
+    },
   },
   date: {
     position: "absolute",
@@ -34,34 +40,46 @@ const useStyles = makeStyles({
 });
 
 interface IProps {
-  todo: STodo;
+  todo: types.STodo;
+  tags: types.STag[];
   onChangeDone(e: React.SyntheticEvent): void;
 }
 
 export const TodoCard: React.SFC<IProps> = ({
   todo,
+  tags,
   onChangeDone,
 }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <div className={classes.side}>
-          <Checkbox
-            checked={todo.done}
-            onChange={onChangeDone}
-          />
+      <div className={classes.side}>
+        <Checkbox
+          checked={todo.done}
+          onChange={onChangeDone}
+        />
+      </div>
+      <div className={classes.main}>
+        <Typography variant="h5" component="h2" className={classes.title}>
+          { todo.title }
+        </Typography>
+        <div className={classes.tags}>
+          {todo.tagIds.map((tid: string) => {
+            const tag = tags.find((t: types.STag) => t.id === tid);
+            if (!tag) {
+              return null;
+            }
+
+            return (
+              <Tip key={tid} name={tag.name} color={tag.color} />
+            );
+          })}
         </div>
-        <div className={classes.main}>
-          <Typography variant="h5" component="h2">
-            { todo.title }
-          </Typography>
-          <Typography className={classes.date} color="textSecondary">
-            { todo.updatedAt}
-          </Typography>
-        </div>
-      </CardContent>
+        <Typography className={classes.date} color="textSecondary">
+          { todo.updatedAt}
+        </Typography>
+      </div>
     </Card>
   );
 };

@@ -12,6 +12,7 @@ export interface IBaseEntity extends SBaseEntity {
 export interface STodo extends SBaseEntity {
   title: string;
   done: boolean;
+  tagIds: string[];
 }
 
 export interface ITodo extends IBaseEntity, STodo {
@@ -52,4 +53,20 @@ export interface INotificationsService {
     type: NotificationType,
     message: string,
   }): Promise<null>;
+}
+
+export interface STag extends SBaseEntity {
+  name: string;
+  color: string;
+}
+
+export interface ITag extends IBaseEntity, STag {
+  serialize(): STag;
+}
+
+export interface ITagsService {
+  create(params: {
+    name: string,
+    color?: string,
+  }): Promise<STag>;
 }
