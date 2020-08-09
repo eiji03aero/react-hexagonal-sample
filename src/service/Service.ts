@@ -1,3 +1,5 @@
+import * as E from "fp-ts/es6/Either";
+
 import * as types from "../types";
 import * as dmn from "../domain";
 
@@ -20,13 +22,13 @@ export class Service implements types.IService {
     this._notificationsService = new dmn.NotificationsService();
   }
 
-  async getTodos (params: types.TodosInput): Promise<types.STodo[]> {
+  async getTodos (params: types.TodosInput): types.PromisedEither<types.STodo[]> {
     return this._proxy.getTodos(params);
   }
 
   async createTodo (params: {
     title: string,
-  }): Promise<types.STodo> {
+  }): types.PromisedEither<types.STodo> {
     const stodo = this._todosService.create(params);
     await this._notificationsService.dispatch({
       type: "success",
@@ -38,29 +40,35 @@ export class Service implements types.IService {
   async markTodoDone (params: {
     id: string,
     done: boolean,
-  }): Promise<null> {
+  }): types.PromisedEither<null> {
     await this._todosService.markTodoDone(params);
     await this._notificationsService.dispatch({
       type: "success",
       message: `Marked Todo ${params.done ? "done" : "undone"}`,
     });
-    return null;
+    return E.right(null);
   }
 
-  async getTags (params: types.TagsInput): Promise<types.STag[]> {
+  async getTags (params: types.TagsInput): types.PromisedEither<types.STag[]> {
     return this._proxy.getTags(params);
   }
 
   async createTag (params: {
     name: string,
     color?: string,
-  }): Promise<types.STag> {
-    const stag = await this._tagsService.create(params);
+  }): types.PromisedEither<types.STag> {
+    const r1 = await this._tagsService.create(params);
+    if (E.isLeft(r1)) {
+      return r1;
+    }
+    const stag = r1.right;
+
     await this._notificationsService.dispatch({
       type: "success",
       message: "Created Tag",
     });
-    return stag;
+
+    return E.right(stag);
   }
 
   async onNotification (handler: types.NotificationHandler) {

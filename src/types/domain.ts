@@ -1,3 +1,6 @@
+import * as base from "./base";
+
+// -------------------- BaseEntity --------------------
 export interface SBaseEntity {
   id: string;
   createdAt: string;
@@ -9,6 +12,7 @@ export interface IBaseEntity extends SBaseEntity {
   equals(other: this): boolean;
 }
 
+// -------------------- Todo --------------------
 export interface STodo extends SBaseEntity {
   title: string;
   done: boolean;
@@ -23,13 +27,31 @@ export interface ITodo extends IBaseEntity, STodo {
 export interface ITodosService {
   create(params: {
     title: string,
-  }): Promise<STodo>;
+  }): base.PromisedEither<STodo>;
   markTodoDone(params: {
     id: string;
     done: boolean;
-  }): Promise<null>;
+  }): base.PromisedEither<null>;
 }
 
+// -------------------- Tag --------------------
+export interface STag extends SBaseEntity {
+  name: string;
+  color: string;
+}
+
+export interface ITag extends IBaseEntity, STag {
+  serialize(): STag;
+}
+
+export interface ITagsService {
+  create(params: {
+    name: string,
+    color?: string,
+  }): base.PromisedEither<STag>;
+}
+
+// -------------------- Notification --------------------
 export type NotificationType =
   | "info"
   | "success"
@@ -52,21 +74,5 @@ export interface INotificationsService {
   dispatch(params: {
     type: NotificationType,
     message: string,
-  }): Promise<null>;
-}
-
-export interface STag extends SBaseEntity {
-  name: string;
-  color: string;
-}
-
-export interface ITag extends IBaseEntity, STag {
-  serialize(): STag;
-}
-
-export interface ITagsService {
-  create(params: {
-    name: string,
-    color?: string,
-  }): Promise<STag>;
+  }): base.PromisedEither<null>;
 }

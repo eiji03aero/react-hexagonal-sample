@@ -2,7 +2,6 @@ import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 import * as dmn from "./domain";
 
-// -------------------- graphql --------------------
 export type CustomApolloClient = ApolloClient<NormalizedCacheObject>;
 
 export interface ILocalState {

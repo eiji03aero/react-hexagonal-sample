@@ -8,10 +8,10 @@ import * as types from "../../../types";
 const useStyles = makeStyles({
   root: {
     width: 280,
-    height: 200,
+    height: 160,
   },
   color: {
-    height: 120,
+    height: 80,
   },
   content: {
     position: "relative",

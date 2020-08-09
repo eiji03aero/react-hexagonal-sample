@@ -1,3 +1,5 @@
+import * as E from "fp-ts/es6/Either";
+
 import * as types from "../../types";
 import { Todo } from "../entities";
 
@@ -12,24 +14,29 @@ export class TodosService implements types.ITodosService {
 
   async create (params: {
     title: string;
-  }): Promise<types.STodo> {
+  }): types.PromisedEither<types.STodo> {
     const todo = new Todo({
       title: params.title,
       done: false,
     });
     const stodo = todo.serialize();
     await this._proxy.addTodo(stodo);
-    return stodo;
+    return E.right(stodo);
   }
 
   async markTodoDone (params: {
     id: string,
     done: boolean,
-  }): Promise<null> {
-    const stodo = await this._proxy.getTodoById(params.id);
+  }): types.PromisedEither<null> {
+    const r1 = await this._proxy.getTodoById(params.id);
+    if (E.isLeft(r1)) {
+      return r1;
+    }
+    const stodo = r1.right;
+
     const todo = new Todo(stodo);
     todo.markDone(params.done);
     await this._proxy.updateTodo(todo.serialize());
-    return null;
+    return E.right(null);
   }
 }

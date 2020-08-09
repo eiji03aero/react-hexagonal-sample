@@ -2,9 +2,11 @@
 - Sample project to describe React + Hexagonal architecture
 
 # Todo
-- error handling
-  - fp-ts is coming in here to rescue shitty code!
+- validations
+  - add validte function on entities
   - utilize notification to give feedback for user
+- edit tags on todo
+  - should have dropdown to select
 - todos filter
   - search by keyword
   - search by tag

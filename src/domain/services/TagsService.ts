@@ -1,3 +1,5 @@
+import * as E from "fp-ts/es6/Either";
+
 import * as types from "../../types";
 import { Tag } from "../entities";
 import { colors } from "../../utils";
@@ -14,13 +16,13 @@ export class TagsService implements types.ITagsService {
   async create (params: {
     name: string,
     color?: string,
-  }): Promise<types.STag> {
+  }): types.PromisedEither<types.STag> {
     const tag = new Tag({
       name: params.name,
       color: params.color || colors.random(),
     });
     const stag = tag.serialize();
     await this._proxy.addTag(stag);
-    return stag;
+    return E.right(stag);
   }
 }

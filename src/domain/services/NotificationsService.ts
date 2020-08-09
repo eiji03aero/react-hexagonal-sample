@@ -1,4 +1,5 @@
 import { EventEmitter } from "events";
+import * as E from "fp-ts/es6/Either";
 
 import * as types from "../../types";
 import { Notification } from "../entities";
@@ -21,9 +22,9 @@ export class NotificationsService implements types.INotificationsService {
   async dispatch (params: {
     type: types.NotificationType,
     message: string,
-  }): Promise<null> {
+  }): types.PromisedEither<null> {
     const notification = new Notification(params);
     this._emitter.emit("notification", notification.serialize());
-    return null;
+    return E.right(null);
   }
 }
