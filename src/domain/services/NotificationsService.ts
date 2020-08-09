@@ -24,6 +24,16 @@ export class NotificationsService implements types.INotificationsService {
     message: string,
   }): types.PromisedEither<null> {
     const notification = new Notification(params);
+    const r1 = notification.validate();
+    if (E.isLeft(r1)) {
+      const errNotification = new Notification({
+        type: "error",
+        message: `notification validation failed: ${r1.left.message}`,
+      });
+      this._emitter.emit("notification", errNotification.serialize());
+      return r1;
+    }
+
     this._emitter.emit("notification", notification.serialize());
     return E.right(null);
   }

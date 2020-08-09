@@ -1,3 +1,5 @@
+import * as E from "fp-ts/es6/Either";
+
 import * as types from "../../types";
 import { BaseEntity } from "./BaseEntity";
 
@@ -21,5 +23,16 @@ export class Tag extends BaseEntity implements types.ITag {
       name: this.name,
       color: this.color,
     };
+  }
+
+  validate (): types.EntityValidateResult {
+    if (!this.name) {
+      return E.left(new Error("name cannot be empty"));
+    }
+    if (!this.color) {
+      return E.left(new Error("color cannot by empty"));
+    }
+
+    return E.right(null);
   }
 }

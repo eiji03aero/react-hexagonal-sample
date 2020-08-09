@@ -4,7 +4,6 @@ import * as gql from "./graphql";
 
 // -------------------- service --------------------
 export interface IService {
-  getTodos(params: gql.TodosInput): base.PromisedEither<dmn.STodo[]>;
   createTodo(params: {
     title: string;
   }): base.PromisedEither<dmn.STodo>;
@@ -12,13 +11,16 @@ export interface IService {
     id: string,
     done: boolean,
   }): base.PromisedEither<null>;
-  getTags(params: gql.TagsInput): base.PromisedEither<dmn.STag[]>;
   createTag(params: {
     name: string,
     color?: string,
   }): base.PromisedEither<dmn.STag>;
   onNotification(handler: dmn.NotificationHandler): void;
   offNotification(handler: dmn.NotificationHandler): void;
+  notificate(params: {
+    type: dmn.NotificationType,
+    message: string,
+  }): base.PromisedEither<null>;
 }
 
 // -------------------- proxy --------------------

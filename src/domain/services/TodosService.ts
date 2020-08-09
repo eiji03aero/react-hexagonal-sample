@@ -19,6 +19,11 @@ export class TodosService implements types.ITodosService {
       title: params.title,
       done: false,
     });
+    const r1 = todo.validate();
+    if (E.isLeft(r1)) {
+      return r1;
+    }
+
     const stodo = todo.serialize();
     await this._proxy.addTodo(stodo);
     return E.right(stodo);
@@ -35,6 +40,11 @@ export class TodosService implements types.ITodosService {
     const stodo = r1.right;
 
     const todo = new Todo(stodo);
+    const r2 = todo.validate();
+    if (E.isLeft(r2)) {
+      return r2;
+    }
+
     todo.markDone(params.done);
     await this._proxy.updateTodo(todo.serialize());
     return E.right(null);

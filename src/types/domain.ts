@@ -1,3 +1,5 @@
+import * as E from "fp-ts/es6/Either";
+
 import * as base from "./base";
 
 // -------------------- BaseEntity --------------------
@@ -7,8 +9,11 @@ export interface SBaseEntity {
   updatedAt: string;
 }
 
+export type EntityValidateResult = E.Either<Error, null>;
+
 export interface IBaseEntity extends SBaseEntity {
   serialize(): SBaseEntity;
+  validate(): EntityValidateResult;
   equals(other: this): boolean;
 }
 

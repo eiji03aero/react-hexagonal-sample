@@ -21,6 +21,11 @@ export class TagsService implements types.ITagsService {
       name: params.name,
       color: params.color || colors.random(),
     });
+    const r1 = tag.validate();
+    if (E.isLeft(r1)) {
+      return r1;
+    }
+
     const stag = tag.serialize();
     await this._proxy.addTag(stag);
     return E.right(stag);

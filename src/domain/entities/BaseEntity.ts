@@ -1,7 +1,8 @@
 import { v4 } from "uuid";
-import { IBaseEntity } from "../../types";
+import * as E from "fp-ts/es6/Either";
+import * as types from "../../types";
 
-export class BaseEntity implements IBaseEntity {
+export class BaseEntity implements types.IBaseEntity {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -23,6 +24,10 @@ export class BaseEntity implements IBaseEntity {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
+  }
+
+  validate (): types.EntityValidateResult {
+    return E.right(null);
   }
 
   equals (other: this) {

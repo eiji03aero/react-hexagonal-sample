@@ -2,9 +2,6 @@
 - Sample project to describe React + Hexagonal architecture
 
 # Todo
-- validations
-  - add validte function on entities
-  - utilize notification to give feedback for user
 - edit tags on todo
   - should have dropdown to select
 - todos filter

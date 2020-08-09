@@ -1,3 +1,5 @@
+import * as E from "fp-ts/es6/Either";
+
 import * as types from "../../types";
 import { BaseEntity } from "./BaseEntity";
 
@@ -25,6 +27,14 @@ export class Todo extends BaseEntity implements types.ITodo {
       done: this.done,
       tagIds: this.tagIds,
     };
+  }
+
+  validate (): types.EntityValidateResult {
+    if (!this.title) {
+      return E.left(new Error("title cannot be empty"));
+    }
+
+    return E.right(null);
   }
 
   markDone (done: boolean) {
