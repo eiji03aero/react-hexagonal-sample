@@ -47,10 +47,13 @@ export const Todos: React.FC = () => {
   }, [ctx]);
 
   const handleChangeDone = React.useCallback((t: types.STodo) => {
-    ctx.service.markTodoDone({
-      id: t.id,
+    ctx.service.updateTodo(t.id, {
       done: !t.done,
     });
+  }, [ctx]);
+
+  const handleUpdateTagIds = React.useCallback((params: { id: string, tagIds: string[] }) => {
+    ctx.service.updateTodo(params.id, { tagIds: params.tagIds });
   }, [ctx]);
 
   return (
@@ -71,6 +74,7 @@ export const Todos: React.FC = () => {
             todo={todo}
             tags={tagsResult.data.tags}
             onChangeDone={(_: any) => handleChangeDone(todo)}
+            onUpdateTagIds={handleUpdateTagIds}
           />
         ))}
       </div>

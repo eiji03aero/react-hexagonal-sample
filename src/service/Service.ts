@@ -43,16 +43,22 @@ export class Service implements types.IService {
     return E.right(stodo);
   }
 
-  async markTodoDone (params: {
-    id: string,
-    done: boolean,
-  }): types.PromisedEither<null> {
-    await this._todosService.markTodoDone(params);
+  async updateTodo (id: string, params: Partial<types.STodo>): types.PromisedEither<types.STodo> {
+    const r1 = await this._todosService.update(id, params);
+    if (E.isLeft(r1)) {
+      await this.notificate({
+        type: "error",
+        message: `Failed to update todo: ${r1.left.message}`,
+      });
+      return r1;
+    }
+    const stodo = r1.right;
+
     await this.notificate({
       type: "success",
-      message: `Marked Todo ${params.done ? "done" : "undone"}`,
+      message: "Updated Todo",
     });
-    return E.right(null);
+    return E.right(stodo);
   }
 
   async createTag (params: {

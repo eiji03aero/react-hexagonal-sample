@@ -29,24 +29,21 @@ export class TodosService implements types.ITodosService {
     return E.right(stodo);
   }
 
-  async markTodoDone (params: {
-    id: string,
-    done: boolean,
-  }): types.PromisedEither<null> {
-    const r1 = await this._proxy.getTodoById(params.id);
+  async update (id: string, params: Partial<types.STodo>): types.PromisedEither<types.STodo> {
+    const r1 = await this._proxy.getTodoById(id);
     if (E.isLeft(r1)) {
       return r1;
     }
     const stodo = r1.right;
 
     const todo = new Todo(stodo);
-    const r2 = todo.validate();
+    const r2 = todo.update(params);
     if (E.isLeft(r2)) {
       return r2;
     }
 
-    todo.markDone(params.done);
-    await this._proxy.updateTodo(todo.serialize());
-    return E.right(null);
+    const updatedStodo = todo.serialize();
+    this._proxy.updateTodo(updatedStodo);
+    return E.right(updatedStodo);
   }
 }

@@ -14,6 +14,7 @@ export type EntityValidateResult = E.Either<Error, null>;
 export interface IBaseEntity extends SBaseEntity {
   serialize(): SBaseEntity;
   validate(): EntityValidateResult;
+  update(params: Partial<SBaseEntity>): EntityValidateResult;
   equals(other: this): boolean;
 }
 
@@ -26,6 +27,7 @@ export interface STodo extends SBaseEntity {
 
 export interface ITodo extends IBaseEntity, STodo {
   serialize(): STodo;
+  update(params: Partial<STodo>): EntityValidateResult;
   markDone(done: boolean): void;
 }
 
@@ -33,10 +35,7 @@ export interface ITodosService {
   create(params: {
     title: string,
   }): base.PromisedEither<STodo>;
-  markTodoDone(params: {
-    id: string;
-    done: boolean;
-  }): base.PromisedEither<null>;
+  update(id: string, params: Partial<STodo>): base.PromisedEither<STodo>;
 }
 
 // -------------------- Tag --------------------
@@ -47,6 +46,7 @@ export interface STag extends SBaseEntity {
 
 export interface ITag extends IBaseEntity, STag {
   serialize(): STag;
+  update(params: Partial<STag>): EntityValidateResult;
 }
 
 export interface ITagsService {

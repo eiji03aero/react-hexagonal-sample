@@ -35,4 +35,17 @@ export class Tag extends BaseEntity implements types.ITag {
 
     return E.right(null);
   }
+
+  update (params: Partial<types.STag>): types.EntityValidateResult {
+    super.update(params);
+
+    if (params.name) {
+      this.name = name;
+    }
+    if (params.color) {
+      this.color = params.color;
+    }
+
+    return this.validate();
+  }
 }

@@ -7,10 +7,7 @@ export interface IService {
   createTodo(params: {
     title: string;
   }): base.PromisedEither<dmn.STodo>;
-  markTodoDone(params: {
-    id: string,
-    done: boolean,
-  }): base.PromisedEither<null>;
+  updateTodo(id: string, params: Partial<dmn.STodo>): base.PromisedEither<dmn.STodo>;
   createTag(params: {
     name: string,
     color?: string,

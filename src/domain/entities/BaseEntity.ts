@@ -34,11 +34,12 @@ export class BaseEntity implements types.IBaseEntity {
     return this === other;
   }
 
-  protected getCurrentDateTime () {
-    return new Date().toISOString();
+  update (_: Partial<types.SBaseEntity>): types.EntityValidateResult {
+    this.updatedAt = this.getCurrentDateTime();
+    return E.right(null);
   }
 
-  protected update () {
-    this.updatedAt = this.getCurrentDateTime();
+  protected getCurrentDateTime () {
+    return new Date().toISOString();
   }
 }

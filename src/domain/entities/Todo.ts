@@ -37,6 +37,22 @@ export class Todo extends BaseEntity implements types.ITodo {
     return E.right(null);
   }
 
+  update (params: Partial<types.STodo>): types.EntityValidateResult {
+    super.update(params);
+
+    if (params.title) {
+      this.title = params.title;
+    }
+    if (params.done !== undefined) {
+      this.done = params.done;
+    }
+    if (params.tagIds) {
+      this.tagIds = params.tagIds;
+    }
+
+    return this.validate();
+  }
+
   markDone (done: boolean) {
     this.done = done;
   }
