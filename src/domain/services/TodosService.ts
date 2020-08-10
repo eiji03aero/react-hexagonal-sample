@@ -4,17 +4,17 @@ import * as types from "../../types";
 import { Todo } from "../entities";
 
 export class TodosService implements types.ITodosService {
-  private _proxy: types.IProxy;
+  private _todosRepository: types.ITodosRepository;
 
   constructor (params: {
-    proxy: types.IProxy,
+    todosRepository: types.ITodosRepository,
   }) {
-    this._proxy = params.proxy;
+    this._todosRepository = params.todosRepository;
   }
 
   async create (params: {
     title: string;
-  }): types.PromisedEither<types.STodo> {
+  }): types.PromisedEither<types.ITodo> {
     const todo = new Todo({
       title: params.title,
       done: false,
@@ -24,13 +24,16 @@ export class TodosService implements types.ITodosService {
       return r1;
     }
 
-    const stodo = todo.serialize();
-    await this._proxy.addTodo(stodo);
-    return E.right(stodo);
+    const r2 = await this._todosRepository.save(todo);
+    if (E.isLeft(r2)) {
+      return r2;
+    }
+
+    return E.right(todo);
   }
 
-  async update (id: string, params: Partial<types.STodo>): types.PromisedEither<types.STodo> {
-    const r1 = await this._proxy.getTodoById(id);
+  async update (id: string, params: Partial<types.STodo>): types.PromisedEither<types.ITodo> {
+    const r1 = await this._todosRepository.find(id);
     if (E.isLeft(r1)) {
       return r1;
     }
@@ -42,8 +45,11 @@ export class TodosService implements types.ITodosService {
       return r2;
     }
 
-    const updatedStodo = todo.serialize();
-    this._proxy.updateTodo(updatedStodo);
-    return E.right(updatedStodo);
+    const r3 = await this._todosRepository.update(todo);
+    if (E.isLeft(r3)) {
+      return r3;
+    }
+
+    return E.right(todo);
   }
 }

@@ -34,8 +34,8 @@ export interface ITodo extends IBaseEntity, STodo {
 export interface ITodosService {
   create(params: {
     title: string,
-  }): base.PromisedEither<STodo>;
-  update(id: string, params: Partial<STodo>): base.PromisedEither<STodo>;
+  }): base.PromisedEither<ITodo>;
+  update(id: string, params: Partial<STodo>): base.PromisedEither<ITodo>;
 }
 
 // -------------------- Tag --------------------
@@ -53,7 +53,7 @@ export interface ITagsService {
   create(params: {
     name: string,
     color?: string,
-  }): base.PromisedEither<STag>;
+  }): base.PromisedEither<ITag>;
 }
 
 // -------------------- Notification --------------------

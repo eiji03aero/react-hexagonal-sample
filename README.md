@@ -2,8 +2,6 @@
 - Sample project to describe React + Hexagonal architecture
 
 # Todo
-- edit tags on todo
-  - should have dropdown to select
 - todos filter
   - search by keyword
   - search by tag

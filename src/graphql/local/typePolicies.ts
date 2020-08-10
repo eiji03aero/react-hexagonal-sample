@@ -10,8 +10,8 @@ export const typePolicies: TypePolicies = {
           const sort = vars.sort || "desc";
 
           stodos.sort((a, b: Reference) => {
-            const ad = new Date(readField<string>("updatedAt", a)!);
-            const bd = new Date(readField<string>("updatedAt", b)!);
+            const ad = new Date(readField<string>("createdAt", a)!);
+            const bd = new Date(readField<string>("createdAt", b)!);
             return ad < bd
               ? -1
               : 1;

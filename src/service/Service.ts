@@ -4,27 +4,30 @@ import * as types from "../types";
 import * as dmn from "../domain";
 
 export class Service implements types.IService {
-  private _proxy: types.IProxy;
+  private _todosRepository: types.ITodosRepository;
+  private _tagsRepository: types.ITagsRepository;
   private _todosService: types.ITodosService;
   private _tagsService: types.ITagsService;
   private _notificationsService: types.INotificationsService;
 
   constructor (params: {
-    proxy: types.IProxy,
+    todosRepository: types.ITodosRepository,
+    tagsRepository: types.ITagsRepository,
   }) {
-    this._proxy = params.proxy;
+    this._todosRepository = params.todosRepository;
+    this._tagsRepository = params.tagsRepository;
     this._todosService = new dmn.TodosService({
-      proxy: this._proxy,
+      todosRepository: this._todosRepository,
     });
     this._tagsService = new dmn.TagsService({
-      proxy: this._proxy,
+      tagsRepository: this._tagsRepository,
     });
     this._notificationsService = new dmn.NotificationsService();
   }
 
   async createTodo (params: {
     title: string,
-  }): types.PromisedEither<types.STodo> {
+  }): types.PromisedEither<types.ITodo> {
     const r1 = await this._todosService.create(params);
     if (E.isLeft(r1)) {
       await this.notificate({
@@ -33,17 +36,17 @@ export class Service implements types.IService {
       });
       return r1;
     }
-    const stodo = r1.right;
+    const todo = r1.right;
 
     await this.notificate({
       type: "success",
       message: "Created Todo",
     });
 
-    return E.right(stodo);
+    return E.right(todo);
   }
 
-  async updateTodo (id: string, params: Partial<types.STodo>): types.PromisedEither<types.STodo> {
+  async updateTodo (id: string, params: Partial<types.STodo>): types.PromisedEither<types.ITodo> {
     const r1 = await this._todosService.update(id, params);
     if (E.isLeft(r1)) {
       await this.notificate({
@@ -52,19 +55,20 @@ export class Service implements types.IService {
       });
       return r1;
     }
-    const stodo = r1.right;
+    const todo = r1.right;
 
     await this.notificate({
       type: "success",
       message: "Updated Todo",
     });
-    return E.right(stodo);
+
+    return E.right(todo);
   }
 
   async createTag (params: {
     name: string,
     color?: string,
-  }): types.PromisedEither<types.STag> {
+  }): types.PromisedEither<types.ITag> {
     const r1 = await this._tagsService.create(params);
     if (E.isLeft(r1)) {
       await this.notificate({
@@ -73,14 +77,14 @@ export class Service implements types.IService {
       });
       return r1;
     }
-    const stag = r1.right;
+    const tag = r1.right;
 
     await this.notificate({
       type: "success",
       message: "Created Tag",
     });
 
-    return E.right(stag);
+    return E.right(tag);
   }
 
   async onNotification (handler: types.NotificationHandler) {

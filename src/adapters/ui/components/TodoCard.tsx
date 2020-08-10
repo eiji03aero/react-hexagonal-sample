@@ -116,7 +116,7 @@ export const TodoCard: React.SFC<IProps> = ({
           </Select>
         </div>
         <Typography className={classes.date} color="textSecondary">
-          { todo.updatedAt}
+          { todo.createdAt }
         </Typography>
       </div>
     </Card>

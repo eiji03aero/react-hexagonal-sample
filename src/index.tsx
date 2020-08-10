@@ -1,7 +1,7 @@
 import { Service } from "./service";
 import { createApolloClient } from "./graphql";
 import { render } from "./adapters/ui";
-import { Proxy } from "./adapters/proxy";
+import * as repos from "./adapters/repositories";
 import { writeSeedData } from "./seed";
 
 document.addEventListener("DOMContentLoaded", function (_) {
@@ -11,12 +11,17 @@ document.addEventListener("DOMContentLoaded", function (_) {
   }
 
   const apolloClient = createApolloClient({});
-  const proxy = new Proxy({
-    apolloClient
+
+  const todosRepository = new repos.TodosRepository({
+    apolloClient,
+  });
+  const tagsRepository = new repos.TagsRepository({
+    apolloClient,
   });
 
   const service = new Service({
-    proxy
+    todosRepository,
+    tagsRepository,
   });
 
   writeSeedData(apolloClient);

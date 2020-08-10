@@ -5,18 +5,18 @@ import { Tag } from "../entities";
 import { colors } from "../../utils";
 
 export class TagsService implements types.ITagsService {
-  private _proxy: types.IProxy;
+  private _tagsRepository: types.ITagsRepository;
 
   constructor (params: {
-    proxy: types.IProxy,
+    tagsRepository: types.ITagsRepository,
   }) {
-    this._proxy = params.proxy;
+    this._tagsRepository = params.tagsRepository;
   }
 
   async create (params: {
     name: string,
     color?: string,
-  }): types.PromisedEither<types.STag> {
+  }): types.PromisedEither<types.ITag> {
     const tag = new Tag({
       name: params.name,
       color: params.color || colors.random(),
@@ -26,8 +26,7 @@ export class TagsService implements types.ITagsService {
       return r1;
     }
 
-    const stag = tag.serialize();
-    await this._proxy.addTag(stag);
-    return E.right(stag);
+    await this._tagsRepository.save(tag);
+    return E.right(tag);
   }
 }
