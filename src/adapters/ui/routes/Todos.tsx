@@ -61,10 +61,8 @@ export const Todos: React.FC = () => {
   }, [ctx]);
 
   const handleSubmitFilter = React.useCallback((params: { keyword: string, tagIds: string[], sort: string }) => {
-    console.log(params);
     setState(params);
-  }, []);
-  console.log(state);
+  }, [setState]);
 
   const handleChangeDone = React.useCallback((t: types.STodo) => {
     ctx.service.updateTodo(t.id, {

@@ -1,12 +1,6 @@
 # react-hexagonal-sample
 - Sample project to describe React + Hexagonal architecture
 
-# Todo
-- todos filter
-  - search by keyword
-  - search by tag
-  - sort
-
 # Models
 
 ```
