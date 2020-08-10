@@ -9,6 +9,8 @@ export interface ILocalState {
 }
 
 export type TodosInput = {
+  keyword?: string;
+  tagIds?: string[];
   sort?: string;
 }
 

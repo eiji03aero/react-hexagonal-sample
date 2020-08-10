@@ -5,9 +5,8 @@ export const typePolicies: TypePolicies = {
     fields: {
       todos: {
         read (_stodos: Reference[], { variables, readField }: FieldFunctionOptions) {
-          const stodos = _stodos.slice();
+          let stodos = _stodos.slice();
           const vars = variables || {};
-          const sort = vars.sort || "desc";
 
           stodos.sort((a, b: Reference) => {
             const ad = new Date(readField<string>("createdAt", a)!);
@@ -17,7 +16,24 @@ export const typePolicies: TypePolicies = {
               : 1;
           });
 
-          if (sort === "desc") {
+          if (vars.keyword) {
+            const keyword = vars.keyword as string;
+            const keywordRE = new RegExp(keyword);
+            stodos = stodos.filter((st: Reference) => {
+              const title = readField<string>("title", st)!;
+              return keywordRE.test(title);
+            });
+          }
+
+          if (vars.tagIds && vars.tagIds.length > 0) {
+            const tagIds = vars.tagIds as string[];
+            stodos = stodos.filter((st: Reference) => {
+              const ids = readField<string[]>("tagIds", st)!;
+              return tagIds.every((id: string) => ids.includes(id));
+            });
+          }
+
+          if (vars.sort === "desc") {
             stodos.reverse();
           }
 

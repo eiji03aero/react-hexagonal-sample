@@ -3,9 +3,10 @@ import { useQuery } from "@apollo/client";
 import { makeStyles } from "@material-ui/core";
 
 import * as types from "../../../types";
-import { AppContext } from "../context";
-import { FormCard, TodoCard } from "../components";
 import { local } from "../../../graphql";
+import { AppContext } from "../context";
+import { FormCard, TodoCard, TagFilterCard } from "../components";
+import { useCompositeState } from "../hooks";
 
 const useStyles = makeStyles({
   root: {
@@ -28,12 +29,25 @@ const useStyles = makeStyles({
   },
 });
 
+interface IState {
+  keyword: string;
+  tagIds: string[];
+  sort: string;
+}
+
 export const Todos: React.FC = () => {
   const ctx = React.useContext(AppContext);
+  const [state, setState] = useCompositeState<IState>({
+    keyword: "",
+    tagIds: [] as string[],
+    sort: "desc",
+  });
   const classes = useStyles();
   const todosResult = useQuery(local.GetTodosDocument, {
     variables: {
-      sort: "desc"
+      keyword: state.keyword,
+      tagIds: state.tagIds,
+      sort: state.sort,
     }
   });
   const tagsResult = useQuery(local.GetTagsDocument, {
@@ -45,6 +59,12 @@ export const Todos: React.FC = () => {
       title: value,
     });
   }, [ctx]);
+
+  const handleSubmitFilter = React.useCallback((params: { keyword: string, tagIds: string[], sort: string }) => {
+    console.log(params);
+    setState(params);
+  }, []);
+  console.log(state);
 
   const handleChangeDone = React.useCallback((t: types.STodo) => {
     ctx.service.updateTodo(t.id, {
@@ -64,6 +84,13 @@ export const Todos: React.FC = () => {
           placeholder="Hit enter to submit"
           size="medium"
           onSubmit={handleCreate}
+        />
+      </div>
+
+      <div className={classes.form}>
+        <TagFilterCard
+          tags={tagsResult.data.tags}
+          onSubmit={handleSubmitFilter}
         />
       </div>
 

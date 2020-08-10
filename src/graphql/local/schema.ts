@@ -16,6 +16,8 @@ export const typeDefs = gql`
   }
 
   input TodosInput {
+    keyword: String
+    tagIds: [String]
     sort: String
   }
 
