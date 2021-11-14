@@ -1,5 +1,6 @@
 # react-hexagonal-sample
 - Sample project to describe React + Hexagonal architecture
+- Write qiita article on this: https://qiita.com/eiji03aero/items/8fba76877132467611cd
 
 # Models
 
